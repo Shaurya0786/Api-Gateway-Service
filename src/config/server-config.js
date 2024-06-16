@@ -6,5 +6,7 @@ dotenv.config();
 
 module.exports = {
     Port: process.env.Port,
-    SaltRounds:process.env.SaltRounds
+    SaltRounds:process.env.SaltRounds,
+    JwtSecret:process.env.JWTSECRET,
+    JwtExpiry:process.env.JWTEXPIRY
 }

@@ -18,6 +18,22 @@ async function signUpController(req,res){
 }
 
 
+async function signInController(req,res){
+    try {
+        const user = await userServices.signIn({
+            email:req.body.email,
+            password:req.body.password
+        })
+        SuccessResponse.data = user
+        return res.status(StatusCodes.CREATED).json(SuccessResponse)
+    } catch (error) {
+        ErrorResponse.error = error
+        return res.status(error.StatusCode).json(ErrorResponse)
+    }
+}
+
+
 module.exports = {
-    signUpController
+    signUpController,
+    signInController
 }
