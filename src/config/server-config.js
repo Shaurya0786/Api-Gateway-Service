@@ -8,5 +8,7 @@ module.exports = {
     Port: process.env.Port,
     SaltRounds:process.env.SaltRounds,
     JwtSecret:process.env.JWTSECRET,
-    JwtExpiry:process.env.JWTEXPIRY
+    JwtExpiry:process.env.JWTEXPIRY,
+    Flight_url:process.env.FLIGHT_URL,
+    Booking_url:process.env.BOOKING_URL
 }
