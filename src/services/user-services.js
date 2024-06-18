@@ -13,8 +13,7 @@ async function signUp(data){
     try {
         const user = await userInstance.create(data)
         const role = await roleInstance.getRolebyname(CUSTOMER)
-        const response = user.addRole(role)
-        console.log(response)
+        await user.addRole(role)
         return user
        } catch (error) {
           if(error.name == "SequelizeUniqueConstraintError" || error.name== "SequelizeValidationError"){
@@ -60,11 +59,37 @@ async function isAuthenticate(token){
 }
 
 
+async function changeRole(data){
+   try {
+      const user = await userInstance.get(data.id)
+      const role = await roleInstance.getRolebyname(data.newRole)
+      await user.addRole(role)
+      return true
+   } catch (error) {
+      if(error instanceof AppError) throw error
+      throw new AppError('Something Went Wrong',StatusCodes.INTERNAL_SERVER_ERROR)
+   }
+}
+
+
+async function isAdmin(id){
+   try {
+      const user = await userInstance.get(id)
+      if(!user) throw new AppError('User Not Found',StatusCodes.BAD_REQUEST)
+      const adminRole = await roleInstance.getRolebyname(ADMIN)
+      return user.hasRole(adminRole)
+   } catch (error) {
+      if(error instanceof AppError) throw error
+      throw new AppError('Something Went Wrong',StatusCodes.INTERNAL_SERVER_ERROR)
+   }
+}
 
 
 
 module.exports = {
     signUp,
     signIn,
-    isAuthenticate
+    isAuthenticate,
+    changeRole,
+    isAdmin
 }
