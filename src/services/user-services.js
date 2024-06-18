@@ -1,15 +1,20 @@
-const {UserRepository} = require('../repositories')
+const {UserRepository,RoleRepository} = require('../repositories')
 const { StatusCodes } = require('http-status-codes')
 const AppError = require('../utils/errors/app-error')
 const {ServerConfig} = require('../config')
 const bcrypt = require('bcrypt')
 const {Auth} = require('../utils/common')
-
+const {enumValues} = require('../utils/common')
+const {ADMIN,CUSTOMER,FLIGHT_COMPANY} = enumValues.rolesEnums
 const userInstance  = new UserRepository()
+const roleInstance  = new RoleRepository() 
 
 async function signUp(data){
     try {
         const user = await userInstance.create(data)
+        const role = await roleInstance.getRolebyname(CUSTOMER)
+        const response = user.addRole(role)
+        console.log(response)
         return user
        } catch (error) {
           if(error.name == "SequelizeUniqueConstraintError" || error.name== "SequelizeValidationError"){
